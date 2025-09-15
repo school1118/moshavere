@@ -257,6 +257,17 @@
             font-size: 0.95rem;
         }
        
+        .inspirational-quote {
+            text-align: center;
+            padding: 16px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            border-radius: 12px;
+            border-right: 4px solid #e2d1c3;
+            font-style: italic;
+            color: #5d4037;
+        }
+       
         footer {
             text-align: center;
             padding: 20px;
@@ -329,9 +340,8 @@
         </header>
        
         <div class="content">
-            <div class="privacy-note">
-                <i class="fas fa-shield-alt"></i>
-                <p><strong>تضمین محرمانگی:</strong> تمامی اطلاعات شما به صورت محرمانه نگهداری شده و تنها برای ارائه خدمات مشاوره ای استفاده می شود.</p>
+            <div class="inspirational-quote">
+                <p>"هر دانش آموزی یک ستاره درخشان است که با راهنمایی مناسب می‌تواند جهان را روشن کند"</p>
             </div>
            
             <form id="consultationForm" action="https://formsubmit.co/ahmadali22024@gmail.com" method="POST">
@@ -362,13 +372,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="nationalCode">کد ملی <span class="optional">(اختیاری)</span></label>
-                            <input type="text" id="nationalCode" name="کد ملی">
+                            <label for="phone">شماره تماس <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="شماره تماس" required placeholder="جهت پاسخگویی بهتر">
                         </div>
 
                         <div class="form-group">
-                            <label for="phone">شماره تماس <span class="optional">(اختیاری)</span></label>
-                            <input type="tel" id="phone" name="شماره تماس" placeholder="جهت پاسخگویی بهتر">
+                            <label for="schoolName">نام مدرسه <span class="optional">(اختیاری)</span></label>
+                            <input type="text" id="schoolName" name="نام مدرسه" placeholder="نام مدرسه خود را وارد کنید">
                         </div>
 
                         <div class="form-group">
@@ -388,6 +398,28 @@
                             <label for="email">ایمیل <span class="optional">(اختیاری)</span></label>
                             <input type="email" id="email" name="ایمیل" placeholder="جهت پاسخگویی بهتر">
                         </div>
+                    </div>
+                </div>
+               
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-comment-dots"></i>
+                        <h2>پیام شما</h2>
+                    </div>
+                   
+                    <div class="form-group">
+                        <label for="messageType">موضوع گفتگو <span class="required">*</span></label>
+                        <select id="messageType" name="موضوع گفتگو" required>
+                            <option value="">انتخاب کنید</option>
+                            <option value="تحصیلی-درسی">تحصیلی - درسی</option>
+                            <option value="شخصی-اجتماعی">شخصی - اجتماعی</option>
+                            <option value="سایر">سایر</option>
+                        </select>
+                    </div>
+                   
+                    <div class="form-group">
+                        <label for="message">متن پیام <span class="required">*</span></label>
+                        <textarea id="message" name="پیام" required placeholder="متن پیام، سوال یا درخواست خود را با جزئیات بنویسید..."></textarea>
                     </div>
                 </div>
                
@@ -426,20 +458,13 @@
                     </div>
                 </div>
                
-                <div class="card">
-                    <div class="card-title">
-                        <i class="fas fa-comment-dots"></i>
-                        <h2>پیام شما</h2>
-                    </div>
-                   
-                    <div class="form-group">
-                        <label for="message">متن پیام <span class="required">*</span></label>
-                        <textarea id="message" name="پیام" required placeholder="متن پیام، سوال یا درخواست خود را با جزئیات بنویسید..."></textarea>
-                    </div>
-                </div>
-               
                 <button type="submit"><i class="fas fa-paper-plane"></i> ارسال پیام</button>
             </form>
+            
+            <div class="privacy-note">
+                <i class="fas fa-shield-alt"></i>
+                <p><strong>تضمین محرمانگی:</strong> تمامی اطلاعات شما به صورت محرمانه نگهداری شده و تنها برای ارائه خدمات مشاوره ای استفاده می شود.</p>
+            </div>
         </div>
        
         <footer>
@@ -455,6 +480,8 @@
             const appointmentSection = document.getElementById('appointmentSection');
             const timeSlots = document.querySelectorAll('.time-slot');
             const selectedTimeInput = document.getElementById('selectedTime');
+            const phoneInput = document.getElementById('phone');
+            const emailInput = document.getElementById('email');
            
             // مدیریت حالت ناشناس
             anonymousCheckbox.addEventListener('change', function() {
@@ -462,15 +489,18 @@
                     studentInfo.style.opacity = '0.6';
                     const inputs = studentInfo.querySelectorAll('input, select');
                     inputs.forEach(input => {
-                        input.disabled = true;
-                        input.removeAttribute('required');
+                        // شماره تماس و ایمیل در حالت ناشناس هم فعال می‌مانند
+                        if (input.id !== 'phone' && input.id !== 'email') {
+                            input.disabled = true;
+                            input.removeAttribute('required');
+                        }
                     });
                 } else {
                     studentInfo.style.opacity = '1';
                     const inputs = studentInfo.querySelectorAll('input, select');
                     inputs.forEach(input => {
                         input.disabled = false;
-                        if (input.id === 'firstName' || input.id === 'lastName' || input.id === 'grade') {
+                        if (input.id === 'firstName' || input.id === 'lastName' || input.id === 'grade' || input.id === 'phone') {
                             input.setAttribute('required', 'true');
                         }
                     });
