@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* استایل‌های شما بدون تغییر */
         :root {
             --primary: #3498db;
             --primary-dark: #2980b9;
@@ -222,13 +221,20 @@
             margin-bottom: 20px;
         }
 
-        .local-warning {
-            background: #ffebee;
-            color: #c62828;
+        .error-message {
+            display: none;
+            background: var(--danger);
+            color: white;
             padding: 15px;
             border-radius: 8px;
+            text-align: center;
             margin-bottom: 20px;
-            border-right: 4px solid #c62828;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
         }
        
         @media (max-width: 600px) {
@@ -254,23 +260,19 @@
                 <i class="fas fa-check-circle"></i> پیام شما با موفقیت ارسال شد!
             </div>
 
-            <div id="localWarning" class="local-warning">
-                <i class="fas fa-exclamation-triangle"></i> 
-                <strong>توجه:</strong> برای ارسال پیام، این صفحه باید از طریق اینترنت باز شود.
+            <div id="errorMessage" class="error-message">
+                <i class="fas fa-exclamation-circle"></i> خطا در ارسال پیام. لطفاً دوباره تلاش کنید.
+            </div>
+
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> در حال ارسال پیام...
             </div>
 
             <div class="privacy-note">
                 <p><i class="fas fa-shield-alt"></i> <strong>تضمین محرمانگی:</strong> تمامی اطلاعات شما به صورت محرمانه نگهداری شده و تنها برای ارائه خدمات مشاوره ای استفاده می شود.</p>
             </div>
            
-            <!-- تغییر مهم: استفاده از ایمیل مستقیم -->
-            <form id="consultationForm" action="https://formsubmit.co/search250@gmail.com" method="POST">
-                <!-- تنظیمات FormSubmit -->
-                <input type="hidden" name="_subject" value="پیام جدید از سیستم مشاوره مدرسه">
-                <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_next" value="https://school1118.github.io/thank-you.html">
-               
+            <form id="consultationForm">
                 <div class="card">
                     <div class="card-title">
                         <i class="fas fa-user-circle"></i>
@@ -285,27 +287,27 @@
                     <div id="studentInfo">
                         <div class="form-group">
                             <label for="firstName">نام <span class="required">*</span></label>
-                            <input type="text" id="firstName" name="نام" required>
+                            <input type="text" id="firstName" name="firstName" required>
                         </div>
 
                         <div class="form-group">
                             <label for="lastName">نام خانوادگی <span class="required">*</span></label>
-                            <input type="text" id="lastName" name="نام خانوادگی" required>
+                            <input type="text" id="lastName" name="lastName" required>
                         </div>
 
                         <div class="form-group">
                             <label for="nationalCode">کد ملی <span class="optional">(اختیاری)</span></label>
-                            <input type="text" id="nationalCode" name="کد ملی">
+                            <input type="text" id="nationalCode" name="nationalCode">
                         </div>
 
                         <div class="form-group">
                             <label for="phone">شماره تماس <span class="optional">(اختیاری)</span></label>
-                            <input type="tel" id="phone" name="شماره تماس" placeholder="جهت پاسخگویی بهتر">
+                            <input type="tel" id="phone" name="phone" placeholder="جهت پاسخگویی بهتر">
                         </div>
 
                         <div class="form-group">
                             <label for="grade">پایه تحصیلی <span class="required">*</span></label>
-                            <select id="grade" name="پایه تحصیلی" required>
+                            <select id="grade" name="grade" required>
                                 <option value="">انتخاب کنید</option>
                                 <option value="هفتم">پایه هفتم</option>
                                 <option value="هشتم">پایه هشتم</option>
@@ -318,7 +320,7 @@
 
                         <div class="form-group">
                             <label for="email">ایمیل <span class="optional">(اختیاری)</span></label>
-                            <input type="email" id="email" name="ایمیل" placeholder="جهت پاسخگویی بهتر">
+                            <input type="email" id="email" name="email" placeholder="جهت پاسخگویی بهتر">
                         </div>
                     </div>
                 </div>
@@ -330,14 +332,14 @@
                     </div>
                    
                     <div class="checkbox-group">
-                        <input type="checkbox" id="appointmentCheckbox" name="درخواست وقت">
+                        <input type="checkbox" id="appointmentCheckbox" name="appointmentRequested">
                         <label for="appointmentCheckbox">می‌خواهم وقت مشاوره حضوری رزرو کنم</label>
                     </div>
                    
                     <div id="appointmentSection" class="appointment-section">
                         <div class="form-group">
                             <label for="appointmentDate">تاریخ مراجعه <span class="required">*</span></label>
-                            <select id="appointmentDate" name="تاریخ مراجعه">
+                            <select id="appointmentDate" name="appointmentDate">
                                 <option value="">انتخاب کنید</option>
                                 <option value="شنبه">شنبه</option>
                                 <option value="یکشنبه">یکشنبه</option>
@@ -353,7 +355,7 @@
                                 <div class="time-slot" data-time="10-11">۱۰:۰۰ تا ۱۱:۰۰</div>
                                 <div class="time-slot" data-time="11-12">۱۱:۰۰ تا ۱۲:۰۰</div>
                             </div>
-                            <input type="hidden" id="selectedTime" name="زمان مراجعه">
+                            <input type="hidden" id="selectedTime" name="appointmentTime">
                         </div>
                     </div>
                 </div>
@@ -366,7 +368,7 @@
                    
                     <div class="form-group">
                         <label for="message">متن پیام <span class="required">*</span></label>
-                        <textarea id="message" name="پیام" required placeholder="متن پیام، سوال یا درخواست خود را با جزئیات بنویسید..."></textarea>
+                        <textarea id="message" name="message" required placeholder="متن پیام، سوال یا درخواست خود را با جزئیات بنویسید..."></textarea>
                     </div>
                 </div>
                
@@ -381,19 +383,55 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('consultationForm');
+            const loading = document.getElementById('loading');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
             const anonymousCheckbox = document.getElementById('anonymousCheckbox');
             const studentInfo = document.getElementById('studentInfo');
             const appointmentCheckbox = document.getElementById('appointmentCheckbox');
             const appointmentSection = document.getElementById('appointmentSection');
             const timeSlots = document.querySelectorAll('.time-slot');
             const selectedTimeInput = document.getElementById('selectedTime');
-            const localWarning = document.getElementById('localWarning');
-           
-            // نمایش اخطار اگر از localhost باز شده
-            if (window.location.protocol === 'file:') {
-                localWarning.style.display = 'block';
-            }
-           
+
+            // endpoint مخصوص شما از Getform.io
+            const GETFORM_ENDPOINT = "https://getform.io/f/bolzkmla";
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                loading.style.display = 'block';
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+
+                const formData = new FormData(form);
+                
+                try {
+                    const response = await fetch(GETFORM_ENDPOINT, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        successMessage.style.display = 'block';
+                        form.reset();
+                        setTimeout(() => {
+                            successMessage.style.display = 'none';
+                        }, 5000);
+                    } else {
+                        throw new Error('خطا در ارسال فرم');
+                    }
+                } catch (error) {
+                    errorMessage.style.display = 'block';
+                    console.error('Error:', error);
+                } finally {
+                    loading.style.display = 'none';
+                }
+            });
+
             // مدیریت حالت ناشناس
             anonymousCheckbox.addEventListener('change', function() {
                 if (this.checked) {
